@@ -42,7 +42,7 @@ $("#submit-train").on("click", function (event) {
     console.log(newTrain.rate);
 
     // Alert
-    alert("Train successfully added");
+    //alert("Train successfully added");
 
     // Clears all of the text-boxes
     $("#train-name").val("");
@@ -82,7 +82,7 @@ database.ref().on("child_added", function (childSnapshot, prevChildKey) {
     // Calculate the months worked using hardcore math
     // To calculate the months worked
     var minAway = moment().diff(moment(firstTrainConverted), "minutes");
-    var minAwayPretty = moment(minAway).format ("mmmm");
+   // var minAwayPretty = moment(minAway).format ("hh:mm");
 
     console.log("Minutes Away: " + minAway);
 
@@ -92,17 +92,10 @@ database.ref().on("child_added", function (childSnapshot, prevChildKey) {
     
     var tMinutesTillTrain = tFrequency - tRemainder;
 
-    var nextArrival = moment().add (tMinutesTillTrain, "minutes").format("hh:mm");
+    var nextArrival = moment().add (tMinutesTillTrain, "minutes").format("HH:mm");
 
     // Add each train's data into the table
     $("#train-schedule > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
-        tFrequency + "</td><td>" + nextArrival + "</td><td>" + minAwayPretty + "</td>");
+        tFrequency + "</td><td>" + nextArrival + "</td><td>" + minAway + "</td>");
 });
 
-// Example Time Math
-// -----------------------------------------------------------------------------
-// Assume Employee start date of January 1, 2015
-// Assume current date is March 1, 2016
-
-// We know that this is 15 months.
-// Now we will create code in moment.js to confirm that any attempt we use meets this test case
