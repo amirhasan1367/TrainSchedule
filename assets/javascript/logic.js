@@ -21,7 +21,7 @@ $("#submit-train").on("click", function (event) {
     // Grabs user input
     var trainName = $("#train-name").val().trim();
     var destination = $("#destination").val().trim();
-    var firstTrain = $("#first-train").val().trim();
+    var firstTrain = moment($("#first-train").val().trim(), "HH:mm").format("X");
     var frequency = $("#frequency").val().trim();
 
     // Creates local "temporary" object for holding employee data
@@ -60,29 +60,43 @@ database.ref().on("child_added", function (childSnapshot, prevChildKey) {
     var trainName = childSnapshot.val().name;
     var destination = childSnapshot.val().destination;
     var firstTrain = childSnapshot.val().start;
-    var frequency = childSnapshot.val().frequency;
+    var tFrequency = parseInt(childSnapshot.val().frequency);
+
+    //var nextArrival = firstTrain;
+
+
 
     // Employee Info
     console.log(trainName);
     console.log(destination);
     console.log(firstTrain);
-    console.log(frequency);
+    console.log(tFrequency);
 
-    // Prettify the employee start
-    //var firstTrainPretty = moment.unix(firstTrain).format("MM/DD/YY");
+    // Prettify the next arrival
+    var firstTrainConverted = moment(firstTrain, "HH:mm").subtract(1, "years");
+    console.log (firstTrainConverted);
+    
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
     // Calculate the months worked using hardcore math
     // To calculate the months worked
-    //var empMonths = moment().diff(moment(firstTrain, "X"), "months");
-    //console.log(empMonths);
+    var minAway = moment().diff(moment(firstTrainConverted), "minutes");
+    var minAwayPretty = moment(minAway).format ("mmmm");
 
-    // Calculate the total billed rate
-    //var empBilled = empMonths * frequency;
-    //console.log(empBilled);
+    console.log("Minutes Away: " + minAway);
+
+    var tRemainder = minAway % tFrequency;
+    console.log(tRemainder);
+
+    
+    var tMinutesTillTrain = tFrequency - tRemainder;
+
+    var nextArrival = moment().add (tMinutesTillTrain, "minutes").format("hh:mm");
 
     // Add each train's data into the table
     $("#train-schedule > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
-        firstTrain + "</td><td> TBD </td><td>" + frequency + "</td>");
+        tFrequency + "</td><td>" + nextArrival + "</td><td>" + minAwayPretty + "</td>");
 });
 
 // Example Time Math
