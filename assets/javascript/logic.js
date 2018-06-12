@@ -36,13 +36,12 @@ $("#submit-train").on("click", function (event) {
     database.ref().push(newTrain);
 
     // Logs everything to console
-    console.log(newTrain.name);
-    console.log(newTrain.role);
-    console.log(newTrain.start);
-    console.log(newTrain.rate);
+    // console.log(newTrain.name);
+    // console.log(newTrain.role);
+    // console.log(newTrain.start);
+    // console.log(newTrain.rate);
 
-    // Alert
-    //alert("Train successfully added");
+
 
     // Clears all of the text-boxes
     $("#train-name").val("");
@@ -54,7 +53,7 @@ $("#submit-train").on("click", function (event) {
 // 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
 database.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
-    console.log(childSnapshot.val());
+    //console.log(childSnapshot.val());
 
     // Store everything into a variable.
     var trainName = childSnapshot.val().name;
@@ -67,27 +66,27 @@ database.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
 
     // Employee Info
-    console.log(trainName);
-    console.log(destination);
-    console.log(firstTrain);
-    console.log(tFrequency);
+    // console.log(trainName);
+    // console.log(destination);
+    // console.log(firstTrain);
+    // console.log(tFrequency);
 
     // Prettify the next arrival
     var firstTrainConverted = moment(firstTrain, "HH:mm").subtract(1, "years");
-    console.log (firstTrainConverted);
+    //console.log (firstTrainConverted);
     
     var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+    //console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
     // Calculate the months worked using hardcore math
     // To calculate the months worked
     var minAway = moment().diff(moment(firstTrainConverted), "minutes");
    // var minAwayPretty = moment(minAway).format ("hh:mm");
 
-    console.log("Minutes Away: " + minAway);
+    //console.log("Minutes Away: " + minAway);
 
     var tRemainder = minAway % tFrequency;
-    console.log(tRemainder);
+    //console.log(tRemainder);
 
     
     var tMinutesTillTrain = tFrequency - tRemainder;
@@ -96,6 +95,6 @@ database.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
     // Add each train's data into the table
     $("#train-schedule > tbody").append("<tr><td>" + trainName + "</td><td>" + destination + "</td><td>" +
-        tFrequency + "</td><td>" + nextArrival + "</td><td>" + minAway + "</td>");
+        tFrequency + "</td><td>" + nextArrival + "</td><td>" + tMinutesTillTrain + "</td>");
 });
 
